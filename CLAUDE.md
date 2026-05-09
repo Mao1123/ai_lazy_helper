@@ -15,6 +15,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 状态管理: Provider
 - 动画: flutter_animate
 - 图标: font_awesome_flutter
+- 网络请求: http
+- 本地存储: shared_preferences
+- 图片生成: screenshot
+- 分享功能: share_plus
 - 目标平台: Android / iOS / Web
 
 ## 常用命令
@@ -53,6 +57,17 @@ flutter test
 - 食物、活动、吐槽文案均按「时段/场景」分组（如 `breakfastFoods`、`weekendActivities`）
 - 每个分组有独立的季节性扩展列表（如 `springFoods`、`summerActivities`）
 - `RandomLogic._weightedPick()` 实现加权随机，将季节性数据混入基础池
+- 情绪数据独立文件（`mood_data.dart`），按心情分组
+
+### 服务层
+- `AiService`：AI 文案生成抽象类，支持 OpenAI 兼容 API
+- `FavoriteService`：收藏本地存储，使用 SharedPreferences
+- `ShareService`：海报生成和分享，使用 screenshot + share_plus
+
+### 页面结构
+- `HomePage`：首页，展示推荐、情绪选择、幸运值
+- `FavoritesPage`：收藏列表，支持左滑删除
+- `SettingsPage`：AI 配置页面
 
 ## 开发进度
 
@@ -75,15 +90,15 @@ flutter test
 - [x] 首页展示：日期、星期、季节标签、时段标签、节假日标签
 - [x] 季节性吐槽文案
 
-### Phase 3 - AI 增强 🚧 待开发
-- [ ] 接入 AI 生成吐槽文案
-- [ ] 情绪模式（开心/emo/摆烂/发疯）
-- [ ] 幸运值系统
+### Phase 3 - AI 增强 ✅ 已完成
+- [x] 情绪模式：开心/emo/摆烂/发疯，影响推荐结果
+- [x] 幸运值系统：每日固定幸运值（0-100），显示等级和建议
+- [x] 接入 AI 生成文案：支持 OpenAI 兼容 API，设置页面配置
 
-### Phase 4 - 扩展 🚧 待开发
-- [ ] 微信小程序 (mpflutter)
-- [ ] 收藏系统
-- [ ] 分享海报
+### Phase 4 - 扩展 ✅ 已完成
+- [x] 收藏系统：收藏喜欢的推荐，本地持久化存储
+- [x] 分享海报：生成精美图片，支持分享到社交媒体
+- [x] 微信小程序：扩展指南文档（docs/wechat_mini_program.md）
 
 ## UI 设计规范
 
