@@ -24,40 +24,82 @@ class RandomLogic {
     return pool;
   }
 
+  // 获取季节性食物
+  static List<String> _getSeasonalFoods() {
+    switch (TimeLogic.season) {
+      case Season.spring:
+        return springFoods;
+      case Season.summer:
+        return summerFoods;
+      case Season.autumn:
+        return autumnFoods;
+      case Season.winter:
+        return winterFoods;
+    }
+  }
+
+  // 获取季节性活动
+  static List<String> _getSeasonalActivities() {
+    switch (TimeLogic.season) {
+      case Season.spring:
+        return springActivities;
+      case Season.summer:
+        return summerActivities;
+      case Season.autumn:
+        return autumnActivities;
+      case Season.winter:
+        return winterActivities;
+    }
+  }
+
   static String recommendFood() {
     final tod = TimeLogic.timeOfDay;
-    final isWeekend = TimeLogic.isWeekend;
     final isLateNight = TimeLogic.isLateNight;
+    final isHolidayMode = TimeLogic.isHolidayMode;
+    final seasonalFoods = _getSeasonalFoods();
 
     List<String> pool;
 
     if (isLateNight) {
       pool = _weightedPick(
         base: lateNightFoods,
-        weighted: lateNightFoods,
+        weighted: [...lateNightFoods, ...seasonalFoods],
         weightRatio: 0.8,
       );
-    } else if (isWeekend) {
+    } else if (isHolidayMode) {
+      // 节假日/周末：偏向聚餐和季节性食物
       pool = _weightedPick(
-        base: dinnerFoods,
-        weighted: ['火锅', '烧烤', '烤肉', '小龙虾'],
-        weightRatio: 0.5,
+        base: [...dinnerFoods, ...holidayFoods],
+        weighted: [...seasonalFoods, '火锅', '烧烤', '烤肉', '小龙虾'],
+        weightRatio: 0.6,
       );
     } else {
       switch (tod) {
-        case TimeOfDay.morning:
-          pool = breakfastFoods;
-        case TimeOfDay.lunch:
+        case AppTimeOfDay.morning:
+          pool = _weightedPick(
+            base: breakfastFoods,
+            weighted: seasonalFoods,
+            weightRatio: 0.2,
+          );
+        case AppTimeOfDay.lunch:
           pool = _weightedPick(
             base: lunchFoods,
-            weighted: ['外卖随便点', '快餐', '公司食堂'],
+            weighted: [...seasonalFoods, '外卖随便点', '快餐', '公司食堂'],
             weightRatio: 0.3,
           );
-        case TimeOfDay.afternoon:
-          pool = afternoonFoods;
-        case TimeOfDay.dinner:
-          pool = dinnerFoods;
-        case TimeOfDay.lateNight:
+        case AppTimeOfDay.afternoon:
+          pool = _weightedPick(
+            base: afternoonFoods,
+            weighted: seasonalFoods,
+            weightRatio: 0.3,
+          );
+        case AppTimeOfDay.dinner:
+          pool = _weightedPick(
+            base: dinnerFoods,
+            weighted: seasonalFoods,
+            weightRatio: 0.4,
+          );
+        case AppTimeOfDay.lateNight:
           pool = lateNightFoods;
       }
     }
@@ -66,28 +108,109 @@ class RandomLogic {
   }
 
   static String recommendActivity() {
-    final isWeekend = TimeLogic.isWeekend;
     final isLateNight = TimeLogic.isLateNight;
+    final isHolidayMode = TimeLogic.isHolidayMode;
+    final seasonalActivities = _getSeasonalActivities();
 
-    if (isLateNight) return _pick(lateNightActivities);
-    if (isWeekend) return _pick(weekendActivities);
-    return _pick(weekdayActivities);
+    if (isLateNight) {
+      return _weightedPick(
+        base: lateNightActivities,
+        weighted: seasonalActivities,
+        weightRatio: 0.3,
+      ).let(_pick);
+    }
+    if (isHolidayMode) {
+      return _weightedPick(
+        base: [...weekendActivities, ...holidayActivities],
+        weighted: seasonalActivities,
+        weightRatio: 0.5,
+      ).let(_pick);
+    }
+    return _weightedPick(
+      base: weekdayActivities,
+      weighted: seasonalActivities,
+      weightRatio: 0.2,
+    ).let(_pick);
   }
 
   static String recommendFoodQuote() {
-    if (TimeLogic.isLateNight) return _pick([...lateNightQuotes, ...foodQuotes]);
-    if (TimeLogic.isWeekend) return _pick([...weekendQuotes, ...foodQuotes]);
-    return _pick([...weekdayQuotes, ...foodQuotes]);
+    final quotes = <String>[];
+
+    // 基础食物吐槽
+    quotes.addAll(foodQuotes);
+
+    // 通用吐槽
+    quotes.addAll(generalQuotes);
+
+    // 根据时间添加
+    if (TimeLogic.isLateNight) {
+      quotes.addAll(lateNightQuotes);
+    } else if (TimeLogic.isHolidayMode) {
+      quotes.addAll(weekendQuotes);
+    } else {
+      quotes.addAll(weekdayQuotes);
+    }
+
+    // 根据季节添加
+    switch (TimeLogic.season) {
+      case Season.spring:
+        quotes.addAll(springQuotes);
+      case Season.summer:
+        quotes.addAll(summerQuotes);
+      case Season.autumn:
+        quotes.addAll(autumnQuotes);
+      case Season.winter:
+        quotes.addAll(winterQuotes);
+    }
+
+    // 根据节日添加
+    if (TimeLogic.isHoliday) {
+      quotes.addAll(holidayQuotes);
+      if (TimeLogic.isValentines) quotes.addAll(valentineQuotes);
+      if (TimeLogic.isHalloween) quotes.addAll(halloweenQuotes);
+    }
+
+    return _pick(quotes);
   }
 
   static String recommendActivityQuote() {
+    final quotes = <String>[];
+
+    // 基础活动吐槽
+    quotes.addAll(activityQuotes);
+
+    // 通用吐槽
+    quotes.addAll(generalQuotes);
+
+    // 根据时间添加
     if (TimeLogic.isLateNight) {
-      return _pick([...lateNightQuotes, ...activityQuotes]);
+      quotes.addAll(lateNightQuotes);
+    } else if (TimeLogic.isHolidayMode) {
+      quotes.addAll(weekendQuotes);
+    } else {
+      quotes.addAll(weekdayQuotes);
     }
-    if (TimeLogic.isWeekend) {
-      return _pick([...weekendQuotes, ...activityQuotes]);
+
+    // 根据季节添加
+    switch (TimeLogic.season) {
+      case Season.spring:
+        quotes.addAll(springQuotes);
+      case Season.summer:
+        quotes.addAll(summerQuotes);
+      case Season.autumn:
+        quotes.addAll(autumnQuotes);
+      case Season.winter:
+        quotes.addAll(winterQuotes);
     }
-    return _pick([...weekdayQuotes, ...activityQuotes]);
+
+    // 根据节日添加
+    if (TimeLogic.isHoliday) {
+      quotes.addAll(holidayQuotes);
+      if (TimeLogic.isValentines) quotes.addAll(valentineQuotes);
+      if (TimeLogic.isHalloween) quotes.addAll(halloweenQuotes);
+    }
+
+    return _pick(quotes);
   }
 
   static RecommendResult recommend() {
@@ -98,4 +221,9 @@ class RandomLogic {
       activityQuote: recommendActivityQuote(),
     );
   }
+}
+
+// 扩展方法，让 List 可以用 let 链式调用
+extension _ListExtension<T> on List<T> {
+  R let<R>(R Function(List<T>) fn) => fn(this);
 }

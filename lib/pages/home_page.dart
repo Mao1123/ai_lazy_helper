@@ -4,6 +4,7 @@ import '../models/recommend_model.dart';
 import '../utils/random_logic.dart';
 import '../utils/time_logic.dart';
 import '../widgets/result_card.dart';
+import '../theme/app_theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,6 +44,36 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // 获取时间图标
+  IconData _getTimeIcon() {
+    switch (TimeLogic.timeOfDay) {
+      case AppTimeOfDay.morning:
+        return FontAwesomeIcons.sun;
+      case AppTimeOfDay.lunch:
+        return FontAwesomeIcons.cloudSun;
+      case AppTimeOfDay.afternoon:
+        return FontAwesomeIcons.cloud;
+      case AppTimeOfDay.dinner:
+        return FontAwesomeIcons.moon;
+      case AppTimeOfDay.lateNight:
+        return FontAwesomeIcons.star;
+    }
+  }
+
+  // 获取季节图标
+  IconData _getSeasonIcon() {
+    switch (TimeLogic.season) {
+      case Season.spring:
+        return FontAwesomeIcons.seedling;
+      case Season.summer:
+        return FontAwesomeIcons.sun;
+      case Season.autumn:
+        return FontAwesomeIcons.leaf;
+      case Season.winter:
+        return FontAwesomeIcons.snowflake;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,19 +101,11 @@ class _HomePageState extends State<HomePage> {
                       color: Color(0xFF888888),
                     ),
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    '', // 时间信息在下面填充
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFFAAAAAA),
-                    ),
-                  ),
                 ],
               ),
             ),
             const SizedBox(height: 10),
-            // 时间提示
+            // 日期时间信息
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -93,13 +116,99 @@ class _HomePageState extends State<HomePage> {
                   color: const Color(0xFFFFD6A5).withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  '${TimeLogic.weekdayName} · ${TimeLogic.timeOfDayName}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF888888),
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FaIcon(
+                      _getTimeIcon(),
+                      size: 14,
+                      color: AppColors.accent,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      TimeLogic.dateTimeDesc,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF888888),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // 季节和时段信息
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF98D8AA).withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(
+                          _getSeasonIcon(),
+                          size: 12,
+                          color: const Color(0xFF4A7C59),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          TimeLogic.seasonName,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF4A7C59),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFB8D4E3).withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(
+                      TimeLogic.timeOfDayName,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF4A7C91),
+                      ),
+                    ),
+                  ),
+                  if (TimeLogic.isHoliday) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFB3B3).withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        TimeLogic.holidayName,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFFCC4444),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
             const SizedBox(height: 20),
