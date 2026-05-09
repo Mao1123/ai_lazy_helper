@@ -3,7 +3,9 @@ import 'dart:math';
 import '../data/food_data.dart';
 import '../data/activity_data.dart';
 import '../data/quote_data.dart';
+import '../data/mood_data.dart';
 import '../models/recommend_model.dart';
+import '../models/mood_model.dart';
 import 'time_logic.dart';
 
 class RandomLogic {
@@ -52,7 +54,49 @@ class RandomLogic {
     }
   }
 
-  static String recommendFood() {
+  // 获取情绪对应的食物
+  static List<String> _getMoodFoods(Mood mood) {
+    switch (mood) {
+      case Mood.happy:
+        return happyFoods;
+      case Mood.emo:
+        return emoFoods;
+      case Mood.lazy:
+        return lazyFoods;
+      case Mood.crazy:
+        return crazyFoods;
+    }
+  }
+
+  // 获取情绪对应的活动
+  static List<String> _getMoodActivities(Mood mood) {
+    switch (mood) {
+      case Mood.happy:
+        return happyActivities;
+      case Mood.emo:
+        return emoActivities;
+      case Mood.lazy:
+        return lazyActivities;
+      case Mood.crazy:
+        return crazyActivities;
+    }
+  }
+
+  // 获取情绪对应的文案
+  static List<String> _getMoodQuotes(Mood mood) {
+    switch (mood) {
+      case Mood.happy:
+        return happyQuotes;
+      case Mood.emo:
+        return emoQuotes;
+      case Mood.lazy:
+        return lazyQuotes;
+      case Mood.crazy:
+        return crazyQuotes;
+    }
+  }
+
+  static String recommendFood({Mood? mood}) {
     final tod = TimeLogic.timeOfDay;
     final isLateNight = TimeLogic.isLateNight;
     final isHolidayMode = TimeLogic.isHolidayMode;
@@ -60,17 +104,19 @@ class RandomLogic {
 
     List<String> pool;
 
+    // 如果有情绪，混入情绪食物
+    final moodFoods = mood != null ? _getMoodFoods(mood) : <String>[];
+
     if (isLateNight) {
       pool = _weightedPick(
         base: lateNightFoods,
-        weighted: [...lateNightFoods, ...seasonalFoods],
+        weighted: [...lateNightFoods, ...seasonalFoods, ...moodFoods],
         weightRatio: 0.8,
       );
     } else if (isHolidayMode) {
-      // 节假日/周末：偏向聚餐和季节性食物
       pool = _weightedPick(
         base: [...dinnerFoods, ...holidayFoods],
-        weighted: [...seasonalFoods, '火锅', '烧烤', '烤肉', '小龙虾'],
+        weighted: [...seasonalFoods, ...moodFoods, '火锅', '烧烤', '烤肉', '小龙虾'],
         weightRatio: 0.6,
       );
     } else {
@@ -78,62 +124,65 @@ class RandomLogic {
         case AppTimeOfDay.morning:
           pool = _weightedPick(
             base: breakfastFoods,
-            weighted: seasonalFoods,
-            weightRatio: 0.2,
+            weighted: [...seasonalFoods, ...moodFoods],
+            weightRatio: 0.3,
           );
         case AppTimeOfDay.lunch:
           pool = _weightedPick(
             base: lunchFoods,
-            weighted: [...seasonalFoods, '外卖随便点', '快餐', '公司食堂'],
+            weighted: [...seasonalFoods, ...moodFoods, '外卖随便点', '快餐', '公司食堂'],
             weightRatio: 0.3,
           );
         case AppTimeOfDay.afternoon:
           pool = _weightedPick(
             base: afternoonFoods,
-            weighted: seasonalFoods,
+            weighted: [...seasonalFoods, ...moodFoods],
             weightRatio: 0.3,
           );
         case AppTimeOfDay.dinner:
           pool = _weightedPick(
             base: dinnerFoods,
-            weighted: seasonalFoods,
+            weighted: [...seasonalFoods, ...moodFoods],
             weightRatio: 0.4,
           );
         case AppTimeOfDay.lateNight:
-          pool = lateNightFoods;
+          pool = [...lateNightFoods, ...moodFoods];
       }
     }
 
     return _pick(pool);
   }
 
-  static String recommendActivity() {
+  static String recommendActivity({Mood? mood}) {
     final isLateNight = TimeLogic.isLateNight;
     final isHolidayMode = TimeLogic.isHolidayMode;
     final seasonalActivities = _getSeasonalActivities();
 
+    // 如果有情绪，混入情绪活动
+    final moodActivities = mood != null ? _getMoodActivities(mood) : <String>[];
+
     if (isLateNight) {
       return _weightedPick(
         base: lateNightActivities,
-        weighted: seasonalActivities,
+        weighted: [...seasonalActivities, ...moodActivities],
         weightRatio: 0.3,
       ).let(_pick);
     }
     if (isHolidayMode) {
       return _weightedPick(
         base: [...weekendActivities, ...holidayActivities],
-        weighted: seasonalActivities,
+        weighted: [...seasonalActivities, ...moodActivities],
         weightRatio: 0.5,
       ).let(_pick);
     }
     return _weightedPick(
       base: weekdayActivities,
-      weighted: seasonalActivities,
-      weightRatio: 0.2,
+      weighted: [...seasonalActivities, ...moodActivities],
+      weightRatio: 0.3,
     ).let(_pick);
   }
 
-  static String recommendFoodQuote() {
+  static String recommendFoodQuote({Mood? mood}) {
     final quotes = <String>[];
 
     // 基础食物吐槽
@@ -170,10 +219,15 @@ class RandomLogic {
       if (TimeLogic.isHalloween) quotes.addAll(halloweenQuotes);
     }
 
+    // 根据情绪添加
+    if (mood != null) {
+      quotes.addAll(_getMoodQuotes(mood));
+    }
+
     return _pick(quotes);
   }
 
-  static String recommendActivityQuote() {
+  static String recommendActivityQuote({Mood? mood}) {
     final quotes = <String>[];
 
     // 基础活动吐槽
@@ -210,15 +264,20 @@ class RandomLogic {
       if (TimeLogic.isHalloween) quotes.addAll(halloweenQuotes);
     }
 
+    // 根据情绪添加
+    if (mood != null) {
+      quotes.addAll(_getMoodQuotes(mood));
+    }
+
     return _pick(quotes);
   }
 
-  static RecommendResult recommend() {
+  static RecommendResult recommend({Mood? mood}) {
     return RecommendResult(
-      food: recommendFood(),
-      activity: recommendActivity(),
-      foodQuote: recommendFoodQuote(),
-      activityQuote: recommendActivityQuote(),
+      food: recommendFood(mood: mood),
+      activity: recommendActivity(mood: mood),
+      foodQuote: recommendFoodQuote(mood: mood),
+      activityQuote: recommendActivityQuote(mood: mood),
     );
   }
 }
