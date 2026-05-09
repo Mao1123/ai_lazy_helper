@@ -7,7 +7,9 @@ import '../utils/random_logic.dart';
 import '../utils/time_logic.dart';
 import '../widgets/result_card.dart';
 import '../theme/app_theme.dart';
+import '../services/share_service.dart';
 import 'settings_page.dart';
+import 'favorites_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,6 +65,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _shareResult() async {
+    try {
+      await ShareService.sharePoster(
+        food: _result.food,
+        activity: _result.activity,
+        foodQuote: _result.foodQuote,
+        activityQuote: _result.activityQuote,
+        luckLevel: _luck.level,
+        luckValue: _luck.value,
+        mood: _selectedMood?.name,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('分享失败，请重试'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
   // 获取时间图标
   IconData _getTimeIcon() {
     switch (TimeLogic.timeOfDay) {
@@ -100,6 +125,27 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppColors.background,
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.shareNodes,
+              color: Color(0xFF888888),
+            ),
+            onPressed: _shareResult,
+          ),
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.heart,
+              color: Color(0xFF888888),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FavoritesPage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const FaIcon(
               FontAwesomeIcons.gear,
@@ -457,6 +503,7 @@ class _HomePageState extends State<HomePage> {
               title: '今天吃什么',
               result: _result.food,
               quote: _result.foodQuote,
+              type: 'food',
               onRefresh: _refreshFood,
             ),
             const SizedBox(height: 10),
@@ -466,6 +513,7 @@ class _HomePageState extends State<HomePage> {
               title: '今天干什么',
               result: _result.activity,
               quote: _result.activityQuote,
+              type: 'activity',
               onRefresh: _refreshActivity,
             ),
             const SizedBox(height: 30),

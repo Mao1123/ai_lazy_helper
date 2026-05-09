@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../models/favorite_model.dart';
+import '../services/favorite_service.dart';
 import '../theme/app_theme.dart';
 
 class ResultCard extends StatefulWidget {
@@ -7,6 +9,7 @@ class ResultCard extends StatefulWidget {
   final String title;
   final String result;
   final String quote;
+  final String type; // 'food' or 'activity'
   final VoidCallback onRefresh;
 
   const ResultCard({
@@ -15,6 +18,7 @@ class ResultCard extends StatefulWidget {
     required this.title,
     required this.result,
     required this.quote,
+    required this.type,
     required this.onRefresh,
   });
 
@@ -24,6 +28,31 @@ class ResultCard extends StatefulWidget {
 
 class _ResultCardState extends State<ResultCard> {
   bool _isAnimating = false;
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavorite();
+  }
+
+  @override
+  void didUpdateWidget(ResultCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.result != widget.result) {
+      _checkFavorite();
+    }
+  }
+
+  Future<void> _checkFavorite() async {
+    final id = FavoriteService.generateId(widget.type, widget.result);
+    final isFavorite = await FavoriteService.isFavorite(id);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+    }
+  }
 
   void _handleRefresh() {
     if (_isAnimating) return;
@@ -32,7 +61,6 @@ class _ResultCardState extends State<ResultCard> {
       _isAnimating = true;
     });
 
-    // 先执行退出动画，再刷新数据，最后执行进入动画
     Future.delayed(const Duration(milliseconds: 300), () {
       widget.onRefresh();
       Future.delayed(const Duration(milliseconds: 50), () {
@@ -43,6 +71,30 @@ class _ResultCardState extends State<ResultCard> {
         }
       });
     });
+  }
+
+  Future<void> _toggleFavorite() async {
+    final id = FavoriteService.generateId(widget.type, widget.result);
+    final item = FavoriteItem(
+      id: id,
+      type: widget.type,
+      content: widget.result,
+      quote: widget.quote,
+      createdAt: DateTime.now(),
+    );
+
+    final isFavorite = await FavoriteService.toggle(item);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(isFavorite ? '已收藏' : '已取消收藏'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
   }
 
   @override
@@ -64,6 +116,21 @@ class _ResultCardState extends State<ResultCard> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
+                  ),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: _toggleFavorite,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: FaIcon(
+                      _isFavorite
+                          ? FontAwesomeIcons.solidHeart
+                          : FontAwesomeIcons.heart,
+                      key: ValueKey<bool>(_isFavorite),
+                      color: _isFavorite ? Colors.red : Colors.grey[400],
+                      size: 22,
+                    ),
                   ),
                 ),
               ],
