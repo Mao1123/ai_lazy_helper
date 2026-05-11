@@ -29,6 +29,40 @@ class _FavoritesPageState extends State<FavoritesPage> {
     });
   }
 
+  IconData _getFavoriteIcon(String type) {
+    switch (type) {
+      case 'food':
+        return FontAwesomeIcons.utensils;
+      case 'activity':
+        return FontAwesomeIcons.gamepad;
+      case 'movie':
+        return FontAwesomeIcons.film;
+      case 'music':
+        return FontAwesomeIcons.headphones;
+      case 'book':
+        return FontAwesomeIcons.bookOpen;
+      default:
+        return FontAwesomeIcons.heart;
+    }
+  }
+
+  Color _getFavoriteColor(String type) {
+    switch (type) {
+      case 'food':
+        return AppColors.accent;
+      case 'activity':
+        return const Color(0xFF4A7C91);
+      case 'movie':
+        return const Color(0xFF9B59B6);
+      case 'music':
+        return const Color(0xFFE74C3C);
+      case 'book':
+        return const Color(0xFF27AE60);
+      default:
+        return AppColors.accent;
+    }
+  }
+
   Future<void> _removeFavorite(String id) async {
     await FavoriteService.remove(id);
     await _loadFavorites();
@@ -105,19 +139,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             width: 48,
                             height: 48,
                             decoration: BoxDecoration(
-                              color: item.type == 'food'
-                                  ? const Color(0xFFFFD6A5).withValues(alpha: 0.3)
-                                  : const Color(0xFFB8D4E3).withValues(alpha: 0.3),
+                              color: _getFavoriteColor(item.type).withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: FaIcon(
-                                item.type == 'food'
-                                    ? FontAwesomeIcons.utensils
-                                    : FontAwesomeIcons.gamepad,
-                                color: item.type == 'food'
-                                    ? AppColors.accent
-                                    : const Color(0xFF4A7C91),
+                                _getFavoriteIcon(item.type),
+                                color: _getFavoriteColor(item.type),
                                 size: 20,
                               ),
                             ),

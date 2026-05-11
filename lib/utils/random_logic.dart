@@ -4,6 +4,9 @@ import '../data/food_data.dart';
 import '../data/activity_data.dart';
 import '../data/quote_data.dart';
 import '../data/mood_data.dart';
+import '../data/movie_data.dart';
+import '../data/music_data.dart';
+import '../data/book_data.dart';
 import '../models/recommend_model.dart';
 import '../models/mood_model.dart';
 import 'time_logic.dart';
@@ -272,12 +275,108 @@ class RandomLogic {
     return _pick(quotes);
   }
 
+  // 电影推荐
+  static String recommendMovie({Mood? mood}) {
+    final timeOfDay = TimeLogic.timeOfDayKey;
+    final season = TimeLogic.season.name;
+
+    List<String> pool = [];
+
+    // 根据心情添加
+    if (mood != null && moodMovieMap[mood.name] != null) {
+      pool.addAll(moodMovieMap[mood.name]!);
+    }
+
+    // 根据时段添加
+    if (timeMovieMap[timeOfDay] != null) {
+      pool.addAll(timeMovieMap[timeOfDay]!);
+    }
+
+    // 根据季节添加
+    if (seasonMovieMap[season] != null) {
+      pool.addAll(seasonMovieMap[season]!);
+    }
+
+    // 如果池为空，使用默认列表
+    if (pool.isEmpty) {
+      pool.addAll(comedyMovies);
+      pool.addAll(healingMovies);
+    }
+
+    return _pick(pool);
+  }
+
+  // 音乐推荐
+  static String recommendMusic({Mood? mood}) {
+    final timeOfDay = TimeLogic.timeOfDayKey;
+    final season = TimeLogic.season.name;
+
+    List<String> pool = [];
+
+    // 根据心情添加
+    if (mood != null && moodMusicMap[mood.name] != null) {
+      pool.addAll(moodMusicMap[mood.name]!);
+    }
+
+    // 根据时段添加
+    if (timeMusicMap[timeOfDay] != null) {
+      pool.addAll(timeMusicMap[timeOfDay]!);
+    }
+
+    // 根据季节添加
+    if (seasonMusicMap[season] != null) {
+      pool.addAll(seasonMusicMap[season]!);
+    }
+
+    // 如果池为空，使用默认列表
+    if (pool.isEmpty) {
+      pool.addAll(popMusic);
+      pool.addAll(healingMusic);
+    }
+
+    return _pick(pool);
+  }
+
+  // 书籍推荐
+  static String recommendBook({Mood? mood}) {
+    final timeOfDay = TimeLogic.timeOfDayKey;
+    final season = TimeLogic.season.name;
+
+    List<String> pool = [];
+
+    // 根据心情添加
+    if (mood != null && moodBookMap[mood.name] != null) {
+      pool.addAll(moodBookMap[mood.name]!);
+    }
+
+    // 根据时段添加
+    if (timeBookMap[timeOfDay] != null) {
+      pool.addAll(timeBookMap[timeOfDay]!);
+    }
+
+    // 根据季节添加
+    if (seasonBookMap[season] != null) {
+      pool.addAll(seasonBookMap[season]!);
+    }
+
+    // 如果池为空，使用默认列表
+    if (pool.isEmpty) {
+      pool.addAll(literatureBooks);
+      pool.addAll(healingBooks);
+    }
+
+    return _pick(pool);
+  }
+
   static RecommendResult recommend({Mood? mood}) {
     return RecommendResult(
       food: recommendFood(mood: mood),
       activity: recommendActivity(mood: mood),
       foodQuote: recommendFoodQuote(mood: mood),
       activityQuote: recommendActivityQuote(mood: mood),
+      movie: recommendMovie(mood: mood),
+      music: recommendMusic(mood: mood),
+      book: recommendBook(mood: mood),
     );
   }
 }

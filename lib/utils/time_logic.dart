@@ -39,6 +39,22 @@ class TimeLogic {
     }
   }
 
+  // 获取时段英文名称（用于数据映射）
+  static String get timeOfDayKey {
+    switch (timeOfDay) {
+      case AppTimeOfDay.morning:
+        return 'morning';
+      case AppTimeOfDay.lunch:
+        return 'lunch';
+      case AppTimeOfDay.afternoon:
+        return 'afternoon';
+      case AppTimeOfDay.dinner:
+        return 'dinner';
+      case AppTimeOfDay.lateNight:
+        return 'lateNight';
+    }
+  }
+
   static String get weekdayName {
     const names = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
     return names[weekday - 1];

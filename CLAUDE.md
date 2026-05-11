@@ -55,9 +55,11 @@ flutter test
 
 ### 数据层设计
 - 食物、活动、吐槽文案均按「时段/场景」分组（如 `breakfastFoods`、`weekendActivities`）
+- 电影、音乐、书籍各有独立数据文件（`movie_data.dart`、`music_data.dart`、`book_data.dart`），按类型分组
 - 每个分组有独立的季节性扩展列表（如 `springFoods`、`summerActivities`）
 - `RandomLogic._weightedPick()` 实现加权随机，将季节性数据混入基础池
 - 情绪数据独立文件（`mood_data.dart`），按心情分组
+- 电影/音乐/书籍通过 `moodMovieMap`、`timeMovieMap`、`seasonMovieMap` 等映射表实现多维度推荐
 
 ### 服务层
 - `AiService`：AI 文案生成抽象类，支持 OpenAI 兼容 API
@@ -99,6 +101,12 @@ flutter test
 - [x] 收藏系统：收藏喜欢的推荐，本地持久化存储
 - [x] 分享海报：生成精美图片，支持分享到社交媒体
 - [x] 微信小程序：扩展指南文档（docs/wechat_mini_program.md）
+
+### Phase 5 - 内容丰富 ✅ 已完成
+- [x] 电影推荐：7 类电影（喜剧/治愈/动作/科幻/恐怖/爱情/悬疑），按心情/时段/季节推荐
+- [x] 音乐推荐：6 类音乐（流行/治愈/摇滚/民谣/电子/古典），按心情/时段/季节推荐
+- [x] 书籍推荐：6 类书籍（文学/治愈/科幻/心理/历史/工具），按心情/时段/季节推荐
+- [x] 收藏页面支持新类型图标和配色
 
 ## UI 设计规范
 
@@ -146,6 +154,7 @@ c8f8d18 feat: 增强时间感知推荐和卡片动画
 - ✅ AI 文案生成（可选）
 - ✅ 收藏和分享功能
 - ✅ 微信小程序扩展指南
+- ✅ 内容丰富：电影/音乐/书籍推荐
 
 **下一步建议**：
 - 测试各平台兼容性（Android/iOS/Web）

@@ -52,6 +52,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         activity: _result.activity,
         foodQuote: RandomLogic.recommendFoodQuote(mood: _selectedMood),
         activityQuote: _result.activityQuote,
+        movie: _result.movie,
+        music: _result.music,
+        book: _result.book,
       );
     });
   }
@@ -63,6 +66,51 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         activity: RandomLogic.recommendActivity(mood: _selectedMood),
         foodQuote: _result.foodQuote,
         activityQuote: RandomLogic.recommendActivityQuote(mood: _selectedMood),
+        movie: _result.movie,
+        music: _result.music,
+        book: _result.book,
+      );
+    });
+  }
+
+  void _refreshMovie() {
+    setState(() {
+      _result = RecommendResult(
+        food: _result.food,
+        activity: _result.activity,
+        foodQuote: _result.foodQuote,
+        activityQuote: _result.activityQuote,
+        movie: RandomLogic.recommendMovie(mood: _selectedMood),
+        music: _result.music,
+        book: _result.book,
+      );
+    });
+  }
+
+  void _refreshMusic() {
+    setState(() {
+      _result = RecommendResult(
+        food: _result.food,
+        activity: _result.activity,
+        foodQuote: _result.foodQuote,
+        activityQuote: _result.activityQuote,
+        movie: _result.movie,
+        music: RandomLogic.recommendMusic(mood: _selectedMood),
+        book: _result.book,
+      );
+    });
+  }
+
+  void _refreshBook() {
+    setState(() {
+      _result = RecommendResult(
+        food: _result.food,
+        activity: _result.activity,
+        foodQuote: _result.foodQuote,
+        activityQuote: _result.activityQuote,
+        movie: _result.movie,
+        music: _result.music,
+        book: RandomLogic.recommendBook(mood: _selectedMood),
       );
     });
   }
@@ -307,6 +355,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               type: 'activity',
               onRefresh: _refreshActivity,
             ),
+            const SizedBox(height: 12),
+            // 今天看什么
+            if (_result.movie != null)
+              ResultCard(
+                icon: FontAwesomeIcons.film,
+                title: '今天看什么',
+                result: _result.movie!,
+                quote: '一部好电影，治愈一整天',
+                type: 'movie',
+                onRefresh: _refreshMovie,
+              ),
+            const SizedBox(height: 12),
+            // 今天听什么
+            if (_result.music != null)
+              ResultCard(
+                icon: FontAwesomeIcons.headphones,
+                title: '今天听什么',
+                result: _result.music!,
+                quote: '音乐是灵魂的良药',
+                type: 'music',
+                onRefresh: _refreshMusic,
+              ),
+            const SizedBox(height: 12),
+            // 今天读什么
+            if (_result.book != null)
+              ResultCard(
+                icon: FontAwesomeIcons.bookOpen,
+                title: '今天读什么',
+                result: _result.book!,
+                quote: '阅读是一座随身携带的避难所',
+                type: 'book',
+                onRefresh: _refreshBook,
+              ),
             const SizedBox(height: 40),
           ],
         ),
