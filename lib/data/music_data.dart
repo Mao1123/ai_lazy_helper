@@ -10,6 +10,14 @@ const List<String> popMusic = [
   '王菲 - 《红豆》',
   'Taylor Swift - 《Love Story》',
   'Ed Sheeran - 《Perfect》',
+  '周杰伦 - 《晴天》',
+  '林俊杰 - 《江南》',
+  '五月天 - 《知足》',
+  '孙燕姿 - 《遇见》',
+  '蔡依林 - 《日不落》',
+  '王力宏 - 《唯一》',
+  '潘玮柏 - 《快乐崇拜》',
+  'S.H.E - 《恋人未满》',
 ];
 
 // 治愈系音乐
@@ -24,6 +32,14 @@ const List<String> healingMusic = [
   '纯音乐 - 《安妮的仙境》',
   '纯音乐 - 《梦中的婚礼》',
   '纯音乐 - 《秋日私语》',
+  '纯音乐 - 《致爱丽丝》',
+  '纯音乐 - 《雨的印记》',
+  '纯音乐 - 《神秘园之歌》',
+  '纯音乐 - 《童年》',
+  '纯音乐 - 《雪之梦》',
+  '纯音乐 - 《星空》',
+  '纯音乐 - 《水边的阿狄丽娜》',
+  '纯音乐 - 《献给爱丽丝》',
 ];
 
 // 摇滚音乐
@@ -38,6 +54,14 @@ const List<String> rockMusic = [
   'Nirvana - 《Smells Like Teen Spirit》',
   'Linkin Park - 《Numb》',
   'Green Day - 《Basket Case》',
+  'Beyond - 《光辉岁月》',
+  '五月天 - 《突然好想你》',
+  '黑豹乐队 - 《无地自容》',
+  '唐朝乐队 - 《梦回唐朝》',
+  'Radiohead - 《Creep》',
+  'The Beatles - 《Let It Be》',
+  'Led Zeppelin - 《Stairway to Heaven》',
+  'Pink Floyd - 《Wish You Were Here》',
 ];
 
 // 民谣音乐
@@ -52,6 +76,14 @@ const List<String> folkMusic = [
   '李健 - 《贝加尔湖畔》',
   'Bob Dylan - 《Blowin\' in the Wind》',
   'John Lennon - 《Imagine》',
+  '赵雷 - 《鼓楼》',
+  '毛不易 - 《像我这样的人》',
+  '好妹妹乐队 - 《你曾是少年》',
+  '花粥 - 《出山》',
+  '隔壁老樊 - 《我曾》',
+  'Jam - 《七月上》',
+  '程璧 - 《春的临终》',
+  '万能青年旅店 - 《杀死那个石家庄人》',
 ];
 
 // 电子音乐
@@ -66,6 +98,14 @@ const List<String> electronicMusic = [
   'Zedd - 《Clarity》',
   'Kygo - 《Firestone》',
   'Skrillex - 《Bangarang》',
+  'Avicii - 《Levels》',
+  'Alan Walker - 《Alone》',
+  'Daft Punk - 《Get Lucky》',
+  'Disclosure - 《Latch》',
+  'Flume - 《Never Be Like You》',
+  'ODESZA - 《Say My Name》',
+  'Major Lazer - 《Lean On》',
+  'DJ Snake - 《Turn Down for What》',
 ];
 
 // 古典音乐
@@ -80,6 +120,14 @@ const List<String> classicalMusic = [
   '舒伯特 - 《小夜曲》',
   '拉赫玛尼诺夫 - 《第二钢琴协奏曲》',
   '马斯涅 - 《沉思》',
+  '贝多芬 - 《命运交响曲》',
+  '贝多芬 - 《欢乐颂》',
+  '莫扎特 - 《安魂曲》',
+  '肖邦 - 《离别曲》',
+  '李斯特 - 《钟》',
+  '圣桑 - 《天鹅》',
+  '埃尔加 - 《爱的致意》',
+  '帕赫贝尔 - 《卡农》',
 ];
 
 // 心情对应的音乐类型
