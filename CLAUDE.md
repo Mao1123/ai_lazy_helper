@@ -138,14 +138,25 @@ docs: 文档更新
 - Web 预览需要用 HTTP 服务器，不能直接打开 HTML 文件
 - Python 在本机有问题，使用 Node.js 启动本地服务器
 
+## 部署配置
+
+### GitHub Pages
+- 自动部署：推送到 master 分支自动触发
+- 部署地址：https://mao1123.github.io/ai_lazy_helper/
+- 配置文件：`.github/workflows/deploy.yml`
+
+### Vercel（备选）
+- 配置文件：`vercel.json`
+- 自动部署：连接 GitHub 仓库后自动触发
+
 ## Git 提交历史
 
 ```
-b3b4eee docs: 更新 CLAUDE.md 记录 Phase 3/4 完成状态
-d09ecb5 feat: Phase 4 - 扩展功能
-04376e4 feat: Phase 3 - AI 增强功能
-c8f8d18 feat: 增强时间感知推荐和卡片动画
-63c6b98 feat: AI摆烂助手 MVP 初始版本
+85594c2 docs: 更新 CLAUDE.md 记录数据扩充完成
+f9c5ea5 feat: 扩充推荐数据，每个分类增至 15-20 项
+bafaa50 feat: Phase 5 - 内容丰富（电影/音乐/书籍推荐）
+da17f8f feat: Web 部署配置
+0a226f6 style: UI 细节优化
 ```
 
 ## 当前状态
