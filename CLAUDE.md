@@ -127,3 +127,27 @@ docs: 文档更新
 - `TimeOfDay` 与 Flutter 内置类冲突，使用 `AppTimeOfDay` 替代
 - Web 预览需要用 HTTP 服务器，不能直接打开 HTML 文件
 - Python 在本机有问题，使用 Node.js 启动本地服务器
+
+## Git 提交历史
+
+```
+b3b4eee docs: 更新 CLAUDE.md 记录 Phase 3/4 完成状态
+d09ecb5 feat: Phase 4 - 扩展功能
+04376e4 feat: Phase 3 - AI 增强功能
+c8f8d18 feat: 增强时间感知推荐和卡片动画
+63c6b98 feat: AI摆烂助手 MVP 初始版本
+```
+
+## 当前状态
+
+**所有 Phase 已完成**，项目功能完整：
+- ✅ 核心推荐系统（时间感知 + 季节 + 节假日）
+- ✅ 情绪模式和幸运值系统
+- ✅ AI 文案生成（可选）
+- ✅ 收藏和分享功能
+- ✅ 微信小程序扩展指南
+
+**下一步建议**：
+- 测试各平台兼容性（Android/iOS/Web）
+- 优化 UI 细节和动画效果
+- 准备发布到应用商店
