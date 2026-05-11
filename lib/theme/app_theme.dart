@@ -7,6 +7,9 @@ class AppColors {
   static const textPrimary = Color(0xFF333333);
   static const textSecondary = Color(0xFF888888);
   static const accent = Color(0xFFFF8C42);
+  static const success = Color(0xFF4CAF50);
+  static const error = Color(0xFFE53935);
+  static const info = Color(0xFF2196F3);
 }
 
 class AppTheme {
@@ -27,10 +30,14 @@ class AppTheme {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+      iconTheme: IconThemeData(
+        color: Color(0xFF888888),
+      ),
     ),
     cardTheme: CardThemeData(
       color: AppColors.card,
       elevation: 2,
+      shadowColor: Colors.black.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -47,6 +54,54 @@ class AppTheme {
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
+        elevation: 3,
+        shadowColor: AppColors.accent.withValues(alpha: 0.3),
+      ),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      contentTextStyle: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+    textTheme: const TextTheme(
+      headlineLarge: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        letterSpacing: 2,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textPrimary,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        color: AppColors.textPrimary,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: AppColors.textSecondary,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
       ),
     ),
   );
