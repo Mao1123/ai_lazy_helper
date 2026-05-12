@@ -110,6 +110,13 @@ flutter test
 - [x] 食物数据扩充：早餐/午餐/晚餐等分类增至 20+ 项
 - [x] 活动数据扩充：工作日/周末/深夜等分类增至 18+ 项
 
+### Phase 6 - 部署与发布 ✅ 已完成
+- [x] GitHub Pages 自动部署：推送到 master 自动构建发布
+- [x] 部署地址：https://mao1123.github.io/ai_lazy_helper/
+- [x] 微信公众号配置：关键词回复和被关注回复
+- [x] 二维码生成：deploy/qrcode.png
+- [x] 部署指南文档：deploy/deploy_guide.md
+
 ## UI 设计规范
 
 ### 配色方案（奶油风）
@@ -140,18 +147,28 @@ docs: 文档更新
 
 ## 部署配置
 
-### GitHub Pages
+### GitHub Pages（已上线）
 - 自动部署：推送到 master 分支自动触发
 - 部署地址：https://mao1123.github.io/ai_lazy_helper/
 - 配置文件：`.github/workflows/deploy.yml`
+- 部署分支：gh-pages
 
 ### Vercel（备选）
 - 配置文件：`vercel.json`
 - 自动部署：连接 GitHub 仓库后自动触发
 
+### 微信公众号
+- 关键词回复：摆烂、推荐、吃什么、干什么
+- 被关注回复：欢迎语 + 功能介绍
+- 二维码：deploy/qrcode.png
+
 ## Git 提交历史
 
 ```
+44db1d1 fix: 修复 Flutter 版本号为 3.41.8
+ee877bb Create static.yml
+10fb36c fix: 更新 GitHub Actions 部署到 gh-pages 分支
+e2f9ecc feat: 添加 GitHub Pages 自动部署配置
 85594c2 docs: 更新 CLAUDE.md 记录数据扩充完成
 f9c5ea5 feat: 扩充推荐数据，每个分类增至 15-20 项
 bafaa50 feat: Phase 5 - 内容丰富（电影/音乐/书籍推荐）
@@ -169,8 +186,15 @@ da17f8f feat: Web 部署配置
 - ✅ 微信小程序扩展指南
 - ✅ 内容丰富：电影/音乐/书籍推荐
 - ✅ 数据丰富：每个分类 15-20 项，总数据量 500+
+- ✅ GitHub Pages 部署上线
+- ✅ 微信公众号配置完成
+
+**在线访问**：
+- Web 地址：https://mao1123.github.io/ai_lazy_helper/
+- 微信公众号：关注后发送关键词即可使用
 
 **下一步建议**：
 - 测试各平台兼容性（Android/iOS/Web）
 - 优化 UI 细节和动画效果
 - 准备发布到应用商店
+- 推广微信公众号
